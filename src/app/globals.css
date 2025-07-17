@@ -1,0 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Shrikhand&family=Fredoka:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #fffef7;
+    --foreground: #2d1b17;
+    --snoopy-yellow: #f4d03f;
+    --snoopy-red: #e74c3c;
+    --snoopy-brown: #8b4513;
+    --snoopy-blue: #5dade2;
+    --snoopy-green: #58d68d;
+    --shadow-soft: #d5d5d5;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: "Kalam", cursive;
+    line-height: 1.7;
+  }
+}
+
+@layer components {
+  .snoopy-border {
+    border: 3px solid var(--foreground);
+    border-radius: 30px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .snoopy-card {
+    @apply bg-white p-6;
+    border: 3px solid var(--foreground);
+    border-radius: 40px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    transform: rotate(-1deg);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .snoopy-card:hover {
+    transform: rotate(0deg) translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  }
+
+  .snoopy-button {
+    @apply px-6 py-3 font-semibold text-lg;
+    background: var(--snoopy-yellow);
+    color: var(--foreground);
+    border: 3px solid var(--foreground);
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-family: "Fredoka", cursive;
+    text-transform: none;
+  }
+
+  .snoopy-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    background: #f7dc6f;
+  }
+
+  .snoopy-button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .snoopy-button.red {
+    background: var(--snoopy-red);
+    color: white;
+  }
+
+  .snoopy-button.red:hover {
+    background: #ec7063;
+  }
+
+  .snoopy-button.green {
+    background: var(--snoopy-green);
+    color: white;
+  }
+
+  .snoopy-button.green:hover {
+    background: #7dcea0;
+  }
+
+  .thought-bubble {
+    @apply relative bg-white p-6;
+    border: 3px solid var(--foreground);
+    border-radius: 50px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    font-family: "Kalam", cursive;
+  }
+
+  .thought-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 40px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 3px solid var(--foreground);
+    border-radius: 50%;
+  }
+
+  .thought-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -25px;
+    left: 25px;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border: 3px solid var(--foreground);
+    border-radius: 50%;
+  }
+
+  .curvy-line {
+    position: relative;
+  }
+
+  .curvy-line::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--foreground);
+    border-radius: 50px;
+    transform: scaleY(0.5);
+  }
+
+  .wavy-border {
+    border-radius: 50% 20% 80% 30%;
+    animation: wave 6s ease-in-out infinite;
+  }
+
+  @keyframes wave {
+    0%, 100% { border-radius: 50% 20% 80% 30%; }
+    25% { border-radius: 30% 60% 20% 80%; }
+    50% { border-radius: 80% 30% 50% 20%; }
+    75% { border-radius: 20% 80% 30% 60%; }
+  }
+
+  .sticky-note {
+    @apply rounded-3xl;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    font-family: "Kalam", cursive;
+    border: 2px solid var(--foreground);
+  }
+
+  .sticky-note:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .sticky-note-shadow {
+    border-radius: 24px;
+  }
+
+  .sticky-note-tape {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--shadow-soft);
+    border-radius: 10px;
+  }
+
+  .font-snoopy {
+    font-family: "Shrikhand", cursive;
+  }
+
+  .font-bubble {
+    font-family: "Fredoka", cursive;
+  }
+
+  .font-handwriting {
+    font-family: "Kalam", cursive;
+    line-height: 1.6;
+  }
+
+  .doodle-line {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .doodle-line::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--snoopy-yellow) 0px,
+      var(--snoopy-yellow) 10px,
+      transparent 10px,
+      transparent 15px
+    );
+    border-radius: 50px;
+  }
+}
