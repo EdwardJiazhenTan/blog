@@ -167,7 +167,7 @@ export default async function TopicPage({ params }: PageProps) {
                   No stories yet
                 </h3>
                 <p className="text-lg opacity-70 font-handwriting" style={{color: 'var(--foreground)'}}>
-                  Stories tagged with "{tag.name}" will appear here
+                  Stories tagged with &quot;{tag.name}&quot; will appear here
                 </p>
               </div>
             </div>

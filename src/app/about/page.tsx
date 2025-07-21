@@ -48,12 +48,12 @@ export default function AboutPage() {
                 style={{ color: "var(--foreground)" }}
               >
                 <p>
-                  I'm a software engineer and University of Rochester graduate
+                  I&apos;m a software engineer and University of Rochester graduate
                   (Class of 2025) with a double major in Computer Science and
                   Business.
                 </p>
                 <p>
-                  I'm passionate about building efficient, scalable solutions
+                  I&apos;m passionate about building efficient, scalable solutions
                   and exploring the intersection of technology and user
                   experience. Always eager to learn new technologies and tackle
                   challenging problems.

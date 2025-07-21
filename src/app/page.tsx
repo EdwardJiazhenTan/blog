@@ -71,7 +71,7 @@ export default async function Home() {
             className="text-7xl font-bold mb-16 font-snoopy doodle-line"
             style={{ color: "var(--foreground)", paddingBottom: "0.5rem" }}
           >
-            Ed's Blog
+            Ed&apos;s Blog
           </h1>
           <div className="thought-bubble inline-block max-w-2xl">
             <p
@@ -156,7 +156,7 @@ export default async function Home() {
                   className="text-lg font-handwriting"
                   style={{ color: "var(--foreground)" }}
                 >
-                  Hmm... no posts yet! But don't worry, something wonderful is
+                  Hmm... no posts yet! But don&apos;t worry, something wonderful is
                   coming soon! 🌟
                 </p>
               </div>

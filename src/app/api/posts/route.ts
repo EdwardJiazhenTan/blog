@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Find or create admin profile
-    let adminProfile = await db
+    const adminProfile = await db
       .select()
       .from(profiles)
       .where(eq(profiles.username, 'admin'))
