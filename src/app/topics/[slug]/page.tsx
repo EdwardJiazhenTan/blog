@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
 import { posts, profiles, tags, postTags } from '@/lib/db/schema';
-import { eq, desc } from 'drizzle-orm';
+import { eq, desc, inArray } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -24,7 +24,20 @@ async function getTagWithPosts(slug: string) {
 
   if (!tag[0]) return null;
 
-  // Get posts for this tag
+  // Get unique post IDs for this tag first
+  const postIds = await db
+    .select({ postId: postTags.postId })
+    .from(postTags)
+    .where(eq(postTags.tagId, tag[0].id));
+
+  if (postIds.length === 0) {
+    return {
+      tag: tag[0],
+      posts: [],
+    };
+  }
+
+  // Then get the actual posts with their details
   const tagPosts = await db
     .select({
       id: posts.id,
@@ -37,21 +50,23 @@ async function getTagWithPosts(slug: string) {
         fullName: profiles.fullName,
       },
     })
-    .from(postTags)
-    .leftJoin(posts, eq(postTags.postId, posts.id))
+    .from(posts)
     .leftJoin(profiles, eq(posts.authorId, profiles.id))
-    .where(eq(postTags.tagId, tag[0].id))
     .where(eq(posts.published, true))
+    .where(inArray(posts.id, postIds.map(p => p.postId)))
     .orderBy(desc(posts.publishedAt));
 
+  const uniquePosts = tagPosts;
+  
   return {
     tag: tag[0],
-    posts: tagPosts,
+    posts: uniquePosts,
   };
 }
 
 export default async function TopicPage({ params }: PageProps) {
-  const data = await getTagWithPosts(params.slug);
+  const { slug } = await params;
+  const data = await getTagWithPosts(slug);
 
   if (!data) {
     notFound();
@@ -77,7 +92,7 @@ export default async function TopicPage({ params }: PageProps) {
         {/* Topic Header */}
         <div className="mb-16 text-center">
           <div 
-            className="inline-block px-6 py-2 rounded-full border border-opacity-30 mb-6"
+            className="inline-block px-4 py-2 rounded-lg border border-opacity-30 mb-6"
             style={{borderColor: 'var(--foreground)'}}
           >
             <h1 className="text-3xl font-bold font-handwriting" style={{color: 'var(--foreground)'}}>

@@ -1,9 +1,10 @@
 import { db } from '@/lib/db';
 import { tags, postTags, posts } from '@/lib/db/schema';
-import { eq, desc, count } from 'drizzle-orm';
+import { eq, desc, count, and, inArray } from 'drizzle-orm';
 import Link from 'next/link';
 
 async function getAllTags() {
+  // Get all tags first
   const allTags = await db
     .select({
       id: tags.id,
@@ -14,23 +15,37 @@ async function getAllTags() {
     .from(tags)
     .orderBy(tags.name);
 
-  // Get post count for each tag
+  // Get post counts for each tag using the same two-step approach
   const tagsWithCounts = await Promise.all(
     allTags.map(async (tag) => {
-      const postCount = await db
-        .select({ count: count() })
+      // Step 1: Get post IDs for this tag
+      const postIds = await db
+        .select({ postId: postTags.postId })
         .from(postTags)
-        .leftJoin(posts, eq(postTags.postId, posts.id))
-        .where(eq(postTags.tagId, tag.id))
-        .where(eq(posts.published, true));
+        .where(eq(postTags.tagId, tag.id));
+
+      if (postIds.length === 0) {
+        return {
+          ...tag,
+          postCount: 0,
+        };
+      }
+
+      // Step 2: Count published posts with those IDs
+      const publishedPosts = await db
+        .select({ id: posts.id })
+        .from(posts)
+        .where(eq(posts.published, true))
+        .where(inArray(posts.id, postIds.map(p => p.postId)));
 
       return {
         ...tag,
-        postCount: postCount[0]?.count || 0,
+        postCount: publishedPosts.length,
       };
     })
   );
 
+  // Only return tags that have at least one published post
   return tagsWithCounts.filter(tag => tag.postCount > 0);
 }
 
@@ -60,7 +75,7 @@ export default async function TopicsPage() {
                 className="group block"
               >
                 <div 
-                  className="p-8 border border-opacity-20 rounded-2xl hover:border-opacity-40 transition-all duration-300 text-center group-hover:transform group-hover:scale-105"
+                  className="p-6 border border-opacity-20 rounded-lg hover:border-opacity-40 transition-all duration-300 text-center group-hover:transform group-hover:scale-105"
                   style={{borderColor: 'var(--foreground)'}}
                 >
                   <h3 className="text-2xl font-bold mb-2 font-handwriting" style={{color: 'var(--foreground)'}}>
@@ -72,7 +87,7 @@ export default async function TopicsPage() {
                   
                   {/* Decorative element */}
                   <div 
-                    className="w-12 h-1 mx-auto mt-4 rounded-full opacity-30 group-hover:opacity-60 transition-opacity"
+                    className="w-8 h-0.5 mx-auto mt-4 rounded opacity-30 group-hover:opacity-60 transition-opacity"
                     style={{backgroundColor: 'var(--foreground)'}}
                   />
                 </div>

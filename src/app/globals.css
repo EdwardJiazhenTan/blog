@@ -23,40 +23,39 @@
 
 @layer components {
   .snoopy-border {
-    border: 3px solid var(--foreground);
-    border-radius: 30px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--foreground);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
 
   .snoopy-card {
     @apply bg-white p-6;
-    border: 3px solid var(--foreground);
-    border-radius: 40px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-    transform: rotate(-1deg);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid var(--foreground);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
   }
 
   .snoopy-card:hover {
-    transform: rotate(0deg) translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   }
 
   .snoopy-button {
-    @apply px-6 py-3 font-semibold text-lg;
+    @apply px-4 py-2 font-medium text-sm;
     background: var(--snoopy-yellow);
     color: var(--foreground);
-    border: 3px solid var(--foreground);
-    border-radius: 50px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid var(--foreground);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
     font-family: "Fredoka", cursive;
     text-transform: none;
   }
 
   .snoopy-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     background: #f7dc6f;
   }
 
@@ -85,33 +84,33 @@
 
   .thought-bubble {
     @apply relative bg-white p-6;
-    border: 3px solid var(--foreground);
-    border-radius: 50px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--foreground);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     font-family: "Kalam", cursive;
   }
 
   .thought-bubble::before {
     content: '';
     position: absolute;
-    bottom: -15px;
+    bottom: -4px;
     left: 40px;
-    width: 20px;
-    height: 20px;
+    width: 8px;
+    height: 8px;
     background: white;
-    border: 3px solid var(--foreground);
+    border: 2px solid var(--foreground);
     border-radius: 50%;
   }
 
   .thought-bubble::after {
     content: '';
     position: absolute;
-    bottom: -25px;
-    left: 25px;
-    width: 12px;
-    height: 12px;
+    bottom: -8px;
+    left: 35px;
+    width: 6px;
+    height: 6px;
     background: white;
-    border: 3px solid var(--foreground);
+    border: 2px solid var(--foreground);
     border-radius: 50%;
   }
 
@@ -132,26 +131,19 @@
   }
 
   .wavy-border {
-    border-radius: 50% 20% 80% 30%;
-    animation: wave 6s ease-in-out infinite;
-  }
-
-  @keyframes wave {
-    0%, 100% { border-radius: 50% 20% 80% 30%; }
-    25% { border-radius: 30% 60% 20% 80%; }
-    50% { border-radius: 80% 30% 50% 20%; }
-    75% { border-radius: 20% 80% 30% 60%; }
+    border-radius: 8px;
+    overflow: hidden;
   }
 
   .sticky-note {
-    @apply rounded-3xl;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    @apply rounded-lg;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     font-family: "Kalam", cursive;
     border: 2px solid var(--foreground);
   }
 
   .sticky-note:hover {
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   }
 
   .sticky-note-shadow {
@@ -185,7 +177,7 @@
   .doodle-line::after {
     content: '';
     position: absolute;
-    bottom: -2px;
+    bottom: -8px;
     left: 0;
     width: 100%;
     height: 3px;
@@ -197,5 +189,170 @@
       transparent 15px
     );
     border-radius: 50px;
+  }
+
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Enhanced scroll animations */
+  .scroll-fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .scroll-fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .scroll-slide-left {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  .scroll-slide-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .scroll-slide-right {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  .scroll-slide-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .scroll-bounce-in {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+    transition: opacity 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
+                transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .scroll-bounce-in.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* Gentle parallax effect for improved scroll feel */
+  .parallax-slow {
+    transform: translateY(var(--scroll-y, 0));
+    transition: transform 0.1s ease-out;
+  }
+
+  /* Enhance existing snoopy-card for better scroll animation */
+  .snoopy-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  /* Enhanced wavy border animation for scroll */
+  /* Removed wavy animation for cleaner look */
+
+  /* Responsive adjustments for sticky notes */
+  @media (max-width: 1024px) {
+    .sticky-note {
+      width: 200px;
+      height: 200px;
+      padding: 1rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .sticky-note {
+      width: 180px;
+      height: 180px;
+      padding: 0.75rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Ensure main content doesn't overlap with sticky notes */
+  .main-content-safe {
+    margin-left: clamp(0px, 5vw, 280px);
+    margin-right: clamp(0px, 5vw, 280px);
+  }
+
+  @media (max-width: 1280px) {
+    .main-content-safe {
+      margin-left: clamp(0px, 3vw, 240px);
+      margin-right: clamp(0px, 3vw, 240px);
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .main-content-safe {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  /* Blog post specific styles */
+  .markdown-content h1,
+  .markdown-content h2,
+  .markdown-content h3 {
+    position: relative;
+  }
+
+  .markdown-content h2::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: var(--snoopy-yellow);
+    border-radius: 2px;
+    opacity: 0.7;
+  }
+
+  .markdown-content img {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .markdown-content pre {
+    border-radius: 8px;
+    /* Removed rotation for cleaner look */
+  }
+
+  /* Custom list styling */
+  .markdown-content ul li {
+    position: relative;
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  .markdown-content ol li {
+    position: relative;
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .markdown-content h1 {
+      font-size: 2.5rem;
+    }
+    
+    .markdown-content h2 {
+      font-size: 2rem;
+    }
+    
+    .markdown-content p {
+      font-size: 1.1rem;
+    }
+    
+    .markdown-content img {
+      border-radius: 8px;
+    }
   }
 }

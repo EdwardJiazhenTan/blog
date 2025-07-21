@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { clsx } from 'clsx';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 interface PostCardProps {
   id: string;
@@ -27,7 +28,8 @@ export function PostCard({
   className
 }: PostCardProps) {
   return (
-    <article className={clsx('snoopy-card', className)}>
+    <ScrollReveal animation="bounce" duration={800} delay={100}>
+      <article className={clsx('snoopy-card', className)}>
       {featuredImage && (
         <div className="mb-4 overflow-hidden wavy-border border-2" style={{borderColor: 'var(--foreground)'}}>
           <img
@@ -88,6 +90,7 @@ export function PostCard({
           Read More
         </Link>
       </div>
-    </article>
+      </article>
+    </ScrollReveal>
   );
 }

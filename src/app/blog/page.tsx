@@ -2,6 +2,7 @@ import { db } from '@/lib/db';
 import { posts, profiles, tags, postTags } from '@/lib/db/schema';
 import { eq, desc } from 'drizzle-orm';
 import Link from 'next/link';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 async function getAllPosts() {
   const allPosts = await db
@@ -50,24 +51,32 @@ export default async function BlogPage() {
     <div className="min-h-screen" style={{backgroundColor: 'var(--background)'}}>
       <div className="max-w-4xl mx-auto px-4 py-16">
         {/* Minimal Header */}
-        <div className="mb-16 text-center">
-          <h1 className="text-5xl font-bold mb-4 font-handwriting" style={{color: 'var(--foreground)'}}>
-            Stories
-          </h1>
-          <p className="text-xl opacity-70 font-handwriting max-w-2xl mx-auto" style={{color: 'var(--foreground)'}}>
-            Thoughts, experiences, and discoveries from my journey through code and life
-          </p>
-        </div>
+        <ScrollReveal animation="fade" duration={1000} delay={200}>
+          <div className="mb-16 text-center">
+            <h1 className="text-5xl font-bold mb-4 font-handwriting" style={{color: 'var(--foreground)'}}>
+              Stories
+            </h1>
+            <p className="text-xl opacity-70 font-handwriting max-w-2xl mx-auto" style={{color: 'var(--foreground)'}}>
+              Thoughts, experiences, and discoveries from my journey through code and life
+            </p>
+          </div>
+        </ScrollReveal>
 
         {/* Posts List - Minimal Design */}
         <div className="space-y-12">
           {allPosts.length > 0 ? (
             allPosts.map((post, index) => (
-              <article 
-                key={post.id} 
-                className="group border-b border-opacity-20 pb-12 last:border-b-0"
-                style={{borderColor: 'var(--foreground)'}}
+              <ScrollReveal 
+                key={post.id}
+                animation="slide-up"
+                duration={600}
+                delay={index * 150}
+                threshold={0.15}
               >
+                <article 
+                  className="group border-b-2 border-opacity-10 pb-12 last:border-b-0"
+                  style={{borderColor: 'var(--foreground)'}}
+                >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <Link 
@@ -92,7 +101,7 @@ export default async function BlogPage() {
                           <Link
                             key={tag.slug}
                             href={`/topics/${tag.slug}`}
-                            className="text-xs px-3 py-1 rounded-full border border-opacity-30 hover:border-opacity-60 transition-all font-handwriting"
+                            className="text-xs px-3 py-1 rounded-lg border border-opacity-30 hover:border-opacity-60 transition-all font-handwriting"
                             style={{
                               color: 'var(--foreground)',
                               borderColor: 'var(--foreground)'
@@ -132,29 +141,34 @@ export default async function BlogPage() {
                   <span>Read more</span>
                   <span>→</span>
                 </Link>
-              </article>
+                </article>
+              </ScrollReveal>
             ))
           ) : (
-            <div className="text-center py-20">
-              <div className="max-w-md mx-auto">
-                <h3 className="text-2xl font-bold mb-4 font-handwriting" style={{color: 'var(--foreground)'}}>
-                  No stories yet
-                </h3>
-                <p className="text-lg opacity-70 font-handwriting" style={{color: 'var(--foreground)'}}>
-                  The first chapter is yet to be written. Check back soon for thoughtful content and discoveries.
-                </p>
+            <ScrollReveal animation="fade" duration={800} delay={400}>
+              <div className="text-center py-20">
+                <div className="max-w-md mx-auto">
+                  <h3 className="text-2xl font-bold mb-4 font-handwriting" style={{color: 'var(--foreground)'}}>
+                    No stories yet
+                  </h3>
+                  <p className="text-lg opacity-70 font-handwriting" style={{color: 'var(--foreground)'}}>
+                    The first chapter is yet to be written. Check back soon for thoughtful content and discoveries.
+                  </p>
+                </div>
               </div>
-            </div>
+            </ScrollReveal>
           )}
         </div>
 
         {/* Minimal Footer */}
         {allPosts.length > 0 && (
-          <div className="mt-20 pt-12 border-t border-opacity-20 text-center" style={{borderColor: 'var(--foreground)'}}>
-            <p className="text-lg opacity-60 font-handwriting" style={{color: 'var(--foreground)'}}>
-              {allPosts.length} {allPosts.length === 1 ? 'story' : 'stories'} and counting...
-            </p>
-          </div>
+          <ScrollReveal animation="fade" duration={800} delay={200}>
+            <div className="mt-20 pt-12 border-t border-opacity-20 text-center" style={{borderColor: 'var(--foreground)'}}>
+              <p className="text-lg opacity-60 font-handwriting" style={{color: 'var(--foreground)'}}>
+                {allPosts.length} {allPosts.length === 1 ? 'story' : 'stories'} and counting...
+              </p>
+            </div>
+          </ScrollReveal>
         )}
       </div>
     </div>

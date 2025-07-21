@@ -13,16 +13,24 @@
     "db:seed": "tsx src/lib/seed.ts"
   },
   "dependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "bcryptjs": "^3.0.2",
     "better-sqlite3": "^11.10.0",
     "clsx": "^2.1.1",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.3",
+    "jsonwebtoken": "^9.0.2",
     "next": "15.4.1",
+    "postgres": "^3.4.7",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-markdown": "^10.1.0",
     "rehype-highlight": "^7.0.2",
-    "remark-gfm": "^4.0.1"
+    "rehype-stringify": "^10.0.1",
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-html": "^16.0.1",
+    "unified": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

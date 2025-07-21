@@ -4,8 +4,8 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "Comic Blog - A Fun Place to Read and Write",
-  description: "A comic book styled blog where ideas come to life with style and creativity",
+  title: "Ed's Blog - A Fun Place to Read and Write",
+  description: "A styled blog where ideas come to life with style and creativity",
 };
 
 export default function RootLayout({

@@ -48,13 +48,47 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { id, title, slug, content, excerpt, tags: postTagNames, authorId, published, publishedAt } = body;
+    const { id, title, slug, content, excerpt, tags: postTagNames, authorId, published, featured, featuredImage, publishedAt } = body;
 
     if (!title || !content || !authorId) {
       return NextResponse.json(
         { error: 'Title, content, and authorId are required' },
         { status: 400 }
       );
+    }
+
+    // Find or create admin profile
+    let adminProfile = await db
+      .select()
+      .from(profiles)
+      .where(eq(profiles.username, 'admin'))
+      .limit(1);
+
+    let actualAuthorId = authorId;
+
+    if (adminProfile.length === 0) {
+      // Create admin profile with fixed ID
+      const adminId = generateId();
+      try {
+        await db.insert(profiles).values({
+          id: adminId,
+          username: 'admin',
+          fullName: 'Blog Administrator',
+          bio: 'Admin user for blog management',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+        actualAuthorId = adminId;
+      } catch (profileError) {
+        console.error('Error creating admin profile:', profileError);
+        return NextResponse.json(
+          { error: 'Could not create admin profile' },
+          { status: 500 }
+        );
+      }
+    } else {
+      // Use existing admin profile ID
+      actualAuthorId = adminProfile[0].id;
     }
 
     // Create the post
@@ -64,8 +98,10 @@ export async function POST(request: NextRequest) {
       slug,
       content,
       excerpt,
-      authorId,
+      authorId: actualAuthorId,
       published: published || false,
+      featured: featured || false,
+      featuredImage,
       publishedAt: publishedAt ? new Date(publishedAt) : null,
       createdAt: new Date(),
       updatedAt: new Date(),

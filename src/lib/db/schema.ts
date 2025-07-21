@@ -19,6 +19,7 @@ export const posts = sqliteTable('posts', {
   excerpt: text('excerpt'),
   authorId: text('author_id').notNull().references(() => profiles.id),
   published: integer('published', { mode: 'boolean' }).default(false),
+  featured: integer('featured', { mode: 'boolean' }).default(false),
   featuredImage: text('featured_image'),
   createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
