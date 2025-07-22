@@ -48,7 +48,9 @@ function WritePageContent() {
         body: JSON.stringify(postData),
       });
 
-      if (response.ok) {
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
         setTitle('');
         setContent('');
         setExcerpt('');
@@ -56,14 +58,15 @@ function WritePageContent() {
         setPublished(false);
         setFeatured(false);
         // setFeaturedImage(''); // Removed featured image
-        alert('Post saved successfully!');
+        alert(`Post saved successfully with ID: ${data.id}!`);
       } else {
-        const errorData = await response.json();
-        alert(`Failed to save post: ${errorData.error}`);
+        console.error('Failed to save post:', data);
+        const errorMsg = data.error || data.details || 'Unknown error';
+        alert(`Failed to save post: ${errorMsg}`);
       }
     } catch (error) {
       console.error('Error saving post:', error);
-      alert('Error saving post');
+      alert(`Network error saving post: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }

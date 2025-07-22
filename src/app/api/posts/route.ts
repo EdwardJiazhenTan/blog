@@ -61,6 +61,8 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+    console.log('Received post data:', { ...body, content: body.content ? body.content.substring(0, 100) + '...' : 'no content' });
+    
     const { id, title, slug, content, excerpt, tags: postTagNames, authorId, published, featured, featuredImage, publishedAt } = body;
 
     if (!title || !content || !authorId) {
@@ -70,38 +72,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find or create admin profile
-    const adminProfile = await db
-      .select()
-      .from(profiles)
-      .where(eq(profiles.username, 'admin'))
-      .limit(1);
-
+    // Handle admin author - convert username to profile ID
     let actualAuthorId = authorId;
+    
+    if (authorId === 'admin') {
+      // Look for admin profile
+      const adminProfile = await db
+        .select()
+        .from(profiles)
+        .where(eq(profiles.username, 'admin'))
+        .limit(1);
 
-    if (adminProfile.length === 0) {
-      // Create admin profile with fixed ID
-      const adminId = generateId();
-      try {
-        await db.insert(profiles).values({
-          id: adminId,
-          username: 'admin',
-          fullName: 'Blog Administrator',
-          bio: 'Admin user for blog management',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
-        actualAuthorId = adminId;
-      } catch (profileError) {
-        console.error('Error creating admin profile:', profileError);
-        return NextResponse.json(
-          { error: 'Could not create admin profile', success: false },
-          { status: 500 }
-        );
+      if (adminProfile.length === 0) {
+        // Use the fixed admin ID that should have been created during database initialization
+        actualAuthorId = 'admin_001';
+        console.log('Using predefined admin ID: admin_001');
+      } else {
+        // Use existing admin profile ID
+        actualAuthorId = adminProfile[0].id;
+        console.log('Found admin profile with ID:', actualAuthorId);
       }
-    } else {
-      // Use existing admin profile ID
-      actualAuthorId = adminProfile[0].id;
     }
 
     // Create the post
@@ -152,6 +142,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    console.log('Post created successfully with ID:', id);
     return NextResponse.json({ success: true, id });
   } catch (error) {
     console.error('Error creating post:', error);
