@@ -1,16 +1,17 @@
 import { db } from '@/lib/db';
 import { posts, profiles, tags, postTags } from '@/lib/db/schema';
-import { eq, desc, inArray } from 'drizzle-orm';
+import { eq, desc, inArray, and } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 async function getTagWithPosts(slug: string) {
+  if (!db) return null;
   // Get the tag
   const tag = await db
     .select({
@@ -52,8 +53,7 @@ async function getTagWithPosts(slug: string) {
     })
     .from(posts)
     .leftJoin(profiles, eq(posts.authorId, profiles.id))
-    .where(eq(posts.published, true))
-    .where(inArray(posts.id, postIds.map(p => p.postId)))
+    .where(and(eq(posts.published, true), inArray(posts.id, postIds.map(p => p.postId))))
     .orderBy(desc(posts.publishedAt));
 
   const uniquePosts = tagPosts;

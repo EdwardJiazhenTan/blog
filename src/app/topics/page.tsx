@@ -4,6 +4,11 @@ import { eq, desc, count, and, inArray } from 'drizzle-orm';
 import Link from 'next/link';
 
 async function getAllTags() {
+  if (!db) {
+    console.error('Database not available');
+    return [];
+  }
+  
   // Get all tags first
   const allTags = await db
     .select({
@@ -19,6 +24,7 @@ async function getAllTags() {
   const tagsWithCounts = await Promise.all(
     allTags.map(async (tag) => {
       // Step 1: Get post IDs for this tag
+      if (!db) return { ...tag, postCount: 0 };
       const postIds = await db
         .select({ postId: postTags.postId })
         .from(postTags)
@@ -35,8 +41,7 @@ async function getAllTags() {
       const publishedPosts = await db
         .select({ id: posts.id })
         .from(posts)
-        .where(eq(posts.published, true))
-        .where(inArray(posts.id, postIds.map(p => p.postId)));
+        .where(and(eq(posts.published, true), inArray(posts.id, postIds.map(p => p.postId))));
 
       return {
         ...tag,

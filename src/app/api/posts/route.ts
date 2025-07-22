@@ -6,10 +6,16 @@ import { generateId, slugify } from '@/lib/utils';
 
 export async function GET(request: NextRequest) {
   try {
+    // Handle database connection failure
+    if (!db) {
+      console.error('Database not initialized');
+      return NextResponse.json([], { status: 200 });
+    }
+
     const { searchParams } = new URL(request.url);
     const published = searchParams.get('published');
 
-    let query = db
+    const baseQuery = db
       .select({
         id: posts.id,
         title: posts.title,
@@ -26,20 +32,18 @@ export async function GET(request: NextRequest) {
         },
       })
       .from(posts)
-      .leftJoin(profiles, eq(posts.authorId, profiles.id))
-      .orderBy(desc(posts.createdAt));
+      .leftJoin(profiles, eq(posts.authorId, profiles.id));
 
-    if (published === 'true') {
-      query = query.where(eq(posts.published, true));
-    }
-
-    const allPosts = await query;
+    const allPosts = published === 'true' 
+      ? await baseQuery.where(eq(posts.published, true)).orderBy(desc(posts.createdAt))
+      : await baseQuery.orderBy(desc(posts.createdAt));
     
-    return NextResponse.json(allPosts);
+    return NextResponse.json(allPosts || []);
   } catch (error) {
     console.error('Error fetching posts:', error);
+    // Always return valid JSON
     return NextResponse.json(
-      { error: 'Failed to fetch posts' },
+      { error: 'Failed to fetch posts', details: error instanceof Error ? error.message : 'Unknown error', posts: [] },
       { status: 500 }
     );
   }
@@ -47,12 +51,21 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    // Handle database connection failure
+    if (!db) {
+      console.error('Database not initialized');
+      return NextResponse.json(
+        { error: 'Database not available', success: false },
+        { status: 500 }
+      );
+    }
+
     const body = await request.json();
     const { id, title, slug, content, excerpt, tags: postTagNames, authorId, published, featured, featuredImage, publishedAt } = body;
 
     if (!title || !content || !authorId) {
       return NextResponse.json(
-        { error: 'Title, content, and authorId are required' },
+        { error: 'Title, content, and authorId are required', success: false },
         { status: 400 }
       );
     }
@@ -82,7 +95,7 @@ export async function POST(request: NextRequest) {
       } catch (profileError) {
         console.error('Error creating admin profile:', profileError);
         return NextResponse.json(
-          { error: 'Could not create admin profile' },
+          { error: 'Could not create admin profile', success: false },
           { status: 500 }
         );
       }
@@ -142,8 +155,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, id });
   } catch (error) {
     console.error('Error creating post:', error);
+    // Always return valid JSON
     return NextResponse.json(
-      { error: 'Failed to create post' },
+      { error: 'Failed to create post', details: error instanceof Error ? error.message : 'Unknown error', success: false },
       { status: 500 }
     );
   }

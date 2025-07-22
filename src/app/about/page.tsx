@@ -273,7 +273,7 @@ export default function AboutPage() {
                 className="text-3xl font-bold font-snoopy"
                 style={{ color: "var(--foreground)" }}
               >
-                Let's Connect
+                Let&apos;s Connect
               </h2>
               <p
                 className="text-lg font-handwriting mt-4"

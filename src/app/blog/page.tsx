@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 async function getAllPosts() {
+  if (!db) return [];
   const allPosts = await db
     .select({
       id: posts.id,
@@ -25,6 +26,7 @@ async function getAllPosts() {
   // Get tags for each post
   const postsWithTags = await Promise.all(
     allPosts.map(async (post) => {
+      if (!db) return { ...post, tags: [] };
       const postTagsData = await db
         .select({
           name: tags.name,

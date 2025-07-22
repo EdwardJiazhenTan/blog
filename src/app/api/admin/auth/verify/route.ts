@@ -4,7 +4,7 @@ import { verify } from 'jsonwebtoken';
 
 export async function GET(request: NextRequest) {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('admin-token')?.value;
     
     if (!token) {
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-      const payload = verify(token, sessionSecret) as any;
+      const payload = verify(token, sessionSecret) as { admin: boolean; exp: number };
       
       // Check if token is valid and not expired
       if (payload.admin) {

@@ -1,11 +1,12 @@
 import { db } from "@/lib/db";
 import { posts, profiles } from "@/lib/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
 import { PostCard } from "@/components/blog/PostCard";
 import { StickyNotesContainer } from "@/components/layout/StickyNotesContainer";
 import Link from "next/link";
 
 async function getRecentPosts() {
+  if (!db) return [];
   const recentPosts = await db
     .select({
       id: posts.id,
@@ -30,6 +31,7 @@ async function getRecentPosts() {
 }
 
 async function getFeaturedPosts() {
+  if (!db) return [];
   const featuredPosts = await db
     .select({
       id: posts.id,
@@ -46,8 +48,7 @@ async function getFeaturedPosts() {
     })
     .from(posts)
     .leftJoin(profiles, eq(posts.authorId, profiles.id))
-    .where(eq(posts.published, true))
-    .where(eq(posts.featured, true))
+    .where(and(eq(posts.published, true), eq(posts.featured, true)))
     .orderBy(desc(posts.publishedAt))
     .limit(2);
 
@@ -107,7 +108,7 @@ export default async function Home() {
                     excerpt={post.excerpt || ""}
                     author={{
                       username: post.author?.username || "Anonymous",
-                      fullName: post.author?.fullName,
+                      fullName: post.author?.fullName || undefined,
                     }}
                     publishedAt={new Date(post.publishedAt || Date.now())}
                     featuredImage={post.featuredImage || undefined}
@@ -141,7 +142,7 @@ export default async function Home() {
                     excerpt={post.excerpt || ""}
                     author={{
                       username: post.author?.username || "Anonymous",
-                      fullName: post.author?.fullName,
+                      fullName: post.author?.fullName || undefined,
                     }}
                     publishedAt={new Date(post.publishedAt || Date.now())}
                     featuredImage={post.featuredImage || undefined}

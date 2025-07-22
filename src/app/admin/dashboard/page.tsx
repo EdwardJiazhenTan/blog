@@ -185,7 +185,7 @@ function DashboardContent() {
             ].map(({ key, label }) => (
               <button
                 key={key}
-                onClick={() => setFilter(key as any)}
+                onClick={() => setFilter(key as 'all' | 'published' | 'draft')}
                 className="px-4 py-2 border border-opacity-30 rounded-lg hover:border-opacity-60 transition-all font-handwriting"
                 style={{
                   color: 'var(--foreground)',

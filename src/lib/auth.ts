@@ -3,7 +3,7 @@ import { verify } from 'jsonwebtoken';
 
 export async function verifyAdminAuth(): Promise<boolean> {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('admin-token')?.value;
     
     if (!token) {
@@ -16,7 +16,7 @@ export async function verifyAdminAuth(): Promise<boolean> {
     }
 
     try {
-      const payload = verify(token, sessionSecret) as any;
+      const payload = verify(token, sessionSecret) as { admin: boolean; exp: number };
       return payload.admin === true;
     } catch (jwtError) {
       return false;

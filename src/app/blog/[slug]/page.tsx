@@ -8,12 +8,17 @@ import rehypeHighlight from 'rehype-highlight';
 import Link from 'next/link';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 async function getPost(slug: string) {
+  if (!db) {
+    console.error('Database not available');
+    return null;
+  }
+  
   const post = await db
     .select({
       id: posts.id,

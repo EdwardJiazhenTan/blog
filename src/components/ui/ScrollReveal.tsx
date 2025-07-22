@@ -60,7 +60,7 @@ export function ScrollReveal({
 
   return (
     <div
-      ref={ref}
+      ref={ref as React.RefObject<HTMLDivElement>}
       className={className}
       style={customAnimationStyle}
     >
