@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Shrikhand&family=Fredoka:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Shrikhand&family=Fredoka:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @layer base {
@@ -337,6 +337,247 @@
     margin-left: 0;
   }
 
+  /* Toggle Block Styles */
+  .snoopy-toggle {
+    @apply my-8;
+    border: 2px solid var(--foreground);
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .snoopy-toggle:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  .snoopy-toggle summary {
+    @apply p-4 cursor-pointer select-none;
+    background: var(--snoopy-yellow);
+    color: var(--foreground);
+    font-family: "Fredoka", cursive;
+    font-weight: 500;
+    font-size: 1.1rem;
+    border: none;
+    outline: none;
+    transition: all 0.2s ease;
+    position: relative;
+    list-style: none;
+  }
+
+  .snoopy-toggle summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .snoopy-toggle summary::after {
+    content: '▼';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    transition: transform 0.3s ease;
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+
+  .snoopy-toggle[open] summary::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  .snoopy-toggle summary:hover {
+    background: #f7dc6f;
+    transform: translateY(-1px);
+  }
+
+  .snoopy-toggle summary:active {
+    transform: translateY(0);
+  }
+
+  .snoopy-toggle-content {
+    @apply p-6;
+    background: white;
+    color: var(--foreground);
+    font-family: "Kalam", cursive;
+    line-height: 1.6;
+    border-top: 1px solid rgba(45, 27, 23, 0.1);
+    animation: slideDown 0.3s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Different toggle themes */
+  .snoopy-toggle.blue summary {
+    background: var(--snoopy-blue);
+    color: white;
+  }
+
+  .snoopy-toggle.blue summary:hover {
+    background: #7fb3d3;
+  }
+
+  .snoopy-toggle.green summary {
+    background: var(--snoopy-green);
+    color: white;
+  }
+
+  .snoopy-toggle.green summary:hover {
+    background: #7dcea0;
+  }
+
+  .snoopy-toggle.red summary {
+    background: var(--snoopy-red);
+    color: white;
+  }
+
+  .snoopy-toggle.red summary:hover {
+    background: #ec7063;
+  }
+
+  /* Simplified Code Block Styles - Clean minimal design */
+  .snoopy-code-block {
+    @apply my-8 relative;
+    background: transparent;
+    border: 1px solid var(--foreground);
+    border-opacity: 0.2;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .snoopy-code-block:hover {
+    border-opacity: 0.3;
+  }
+
+  .snoopy-code-block .copy-button {
+    @apply absolute top-3 right-3 px-3 py-1.5 text-xs rounded transition-all;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--foreground);
+    border: 1px solid var(--foreground);
+    border-opacity: 0.2;
+    font-family: "Fredoka", cursive;
+    font-weight: 500;
+    cursor: pointer;
+    z-index: 20;
+  }
+
+  .snoopy-code-block .copy-button:hover {
+    background: white;
+    border-opacity: 0.4;
+    transform: translateY(-1px);
+  }
+
+  .snoopy-code-block .copy-button:active {
+    transform: translateY(0);
+  }
+
+  .snoopy-code-block .copy-button.copied {
+    background: var(--snoopy-green);
+    color: white;
+    border-color: var(--snoopy-green);
+    border-opacity: 1;
+  }
+
+  .snoopy-code-block .language-indicator {
+    @apply absolute top-3 left-3 px-3 py-1.5 text-xs rounded;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--foreground);
+    border: 1px solid var(--foreground);
+    border-opacity: 0.2;
+    font-family: "Fredoka", cursive;
+    font-weight: 500;
+    z-index: 20;
+  }
+
+  .code-block-wrapper .language-label {
+    @apply mb-2 text-sm;
+    color: var(--foreground);
+    font-family: "Fredoka", cursive;
+    font-weight: 500;
+    opacity: 0.8;
+  }
+
+
+  /* Enhanced syntax highlighting styles */
+  .snoopy-code-block pre {
+    @apply m-0 p-4;
+    background: transparent !important;
+    color: var(--foreground);
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+    overflow-x: auto;
+    border-radius: 8px;
+  }
+
+  .snoopy-code-block code {
+    background: transparent !important;
+    color: inherit;
+    padding: 0;
+    border: none;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  }
+
+  /* Inline code styling */
+  code {
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace !important;
+    font-weight: 500;
+  }
+
+  /* Custom syntax highlighting colors */
+  .snoopy-code-block .hljs-keyword,
+  .snoopy-code-block .hljs-selector-tag,
+  .snoopy-code-block .hljs-literal {
+    color: #a626a4;
+    font-weight: 600;
+  }
+
+  .snoopy-code-block .hljs-string,
+  .snoopy-code-block .hljs-doctag {
+    color: #50a14f;
+  }
+
+  .snoopy-code-block .hljs-title,
+  .snoopy-code-block .hljs-function > .hljs-title,
+  .snoopy-code-block .hljs-params {
+    color: #4078f2;
+  }
+
+  .snoopy-code-block .hljs-number,
+  .snoopy-code-block .hljs-built_in {
+    color: #986801;
+  }
+
+  .snoopy-code-block .hljs-comment,
+  .snoopy-code-block .hljs-quote {
+    color: #a0a1a7;
+    font-style: italic;
+  }
+
+  .snoopy-code-block .hljs-variable,
+  .snoopy-code-block .hljs-template-variable {
+    color: #e45649;
+  }
+
+  .snoopy-code-block .hljs-attr,
+  .snoopy-code-block .hljs-attribute {
+    color: #0184bb;
+  }
+
+  .snoopy-code-block .hljs-operator,
+  .snoopy-code-block .hljs-punctuation {
+    color: #383a42;
+  }
+
   /* Responsive adjustments */
   @media (max-width: 768px) {
     .markdown-content h1 {
@@ -353,6 +594,15 @@
     
     .markdown-content img {
       border-radius: 8px;
+    }
+
+    .snoopy-toggle summary {
+      font-size: 1rem;
+      padding: 12px 16px;
+    }
+
+    .snoopy-toggle-content {
+      padding: 16px;
     }
   }
 }

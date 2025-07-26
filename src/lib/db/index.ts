@@ -59,6 +59,7 @@ const ensureTablesExist = (sqlite: InstanceType<typeof Database>) => {
         id TEXT PRIMARY KEY,
         username TEXT UNIQUE NOT NULL,
         full_name TEXT,
+        avatar_url TEXT,
         bio TEXT,
         created_at INTEGER DEFAULT (unixepoch()),
         updated_at INTEGER DEFAULT (unixepoch())

@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import Link from 'next/link';
+import { CodeBlock } from '@/components/ui/CodeBlock';
 
 interface PageProps {
   params: Promise<{
@@ -216,19 +217,18 @@ export default async function BlogPostPage({ params }: PageProps) {
                   </code>
                 );
               },
-              pre: ({ children }) => (
-                <div className="snoopy-card my-10">
-                  <pre 
-                    className="p-6 rounded-lg overflow-x-auto font-mono text-sm"
-                    style={{
-                      backgroundColor: 'rgba(45, 27, 23, 0.05)',
-                      color: 'var(--foreground)'
-                    }}
-                  >
+              pre: ({ children, ...props }) => {
+                // Extract language from className
+                const child = Array.isArray(children) ? children[0] : children;
+                const className = child?.props?.className || '';
+                const language = className.replace('language-', '').toLowerCase();
+
+                return (
+                  <CodeBlock language={language} className={props.className}>
                     {children}
-                  </pre>
-                </div>
-              ),
+                  </CodeBlock>
+                );
+              },
               ul: ({ children }) => (
                 <ul className="space-y-4 mb-8 font-handwriting" style={{color: 'var(--foreground)'}}>
                   {children}
@@ -282,6 +282,16 @@ export default async function BlogPostPage({ params }: PageProps) {
                 <em className="italic" style={{color: 'var(--foreground)'}}>
                   {children}
                 </em>
+              ),
+              details: ({ children, ...props }) => (
+                <details className="snoopy-toggle" {...props}>
+                  {children}
+                </details>
+              ),
+              summary: ({ children }) => (
+                <summary>
+                  {children}
+                </summary>
               ),
             }}
             >
