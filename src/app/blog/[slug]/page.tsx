@@ -1,10 +1,11 @@
 import { db } from '@/lib/db';
-import { posts, profiles, tags, postTags } from '@/lib/db/schema';
+import { posts, profiles, tags, postTags } from '@/lib/db/schema-postgres';
 import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
+import rehypeRaw from 'rehype-raw';
 import Link from 'next/link';
 import { CodeBlock } from '@/components/ui/CodeBlock';
 
@@ -165,7 +166,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           <div className="markdown-content">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeHighlight]}
+              rehypePlugins={[rehypeRaw, rehypeHighlight]}
               components={{
               h1: ({ children }) => (
                 <h1 className="text-4xl font-bold mt-16 mb-8 font-snoopy text-center" style={{color: 'var(--foreground)'}}>
@@ -292,6 +293,24 @@ export default async function BlogPostPage({ params }: PageProps) {
                 <summary>
                   {children}
                 </summary>
+              ),
+              video: ({ src, controls, style, className, children, ...props }) => (
+                <div className="my-12">
+                  <div className="snoopy-card overflow-hidden">
+                    <video
+                      src={src}
+                      controls={controls}
+                      style={style}
+                      className={className}
+                      {...props}
+                    >
+                      {children}
+                    </video>
+                  </div>
+                </div>
+              ),
+              source: ({ src, type, ...props }) => (
+                <source src={src} type={type} {...props} />
               ),
             }}
             >

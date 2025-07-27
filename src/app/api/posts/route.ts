@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { posts, profiles, tags, postTags } from '@/lib/db/schema';
+import { posts, profiles, tags, postTags } from '@/lib/db/schema-postgres';
 import { eq, desc } from 'drizzle-orm';
 import { generateId, slugify } from '@/lib/utils';
 

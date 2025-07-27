@@ -1,5 +1,5 @@
 import { db } from './db';
-import { profiles, posts, categories, postCategories, tags, postTags } from './db/schema';
+import { profiles, posts, categories, postCategories, tags, postTags } from './db/schema-postgres';
 import { generateId, slugify } from './utils';
 
 export async function seedDatabase() {

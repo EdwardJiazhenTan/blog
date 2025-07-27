@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { posts, profiles } from "@/lib/db/schema";
+import { posts, profiles } from "@/lib/db/schema-postgres";
 import { eq, desc, and } from "drizzle-orm";
 import { PostCard } from "@/components/blog/PostCard";
 import { StickyNotesContainer } from "@/components/layout/StickyNotesContainer";

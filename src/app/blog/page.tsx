@@ -1,5 +1,5 @@
 import { db } from '@/lib/db';
-import { posts, profiles, tags, postTags } from '@/lib/db/schema';
+import { posts, profiles, tags, postTags } from '@/lib/db/schema-postgres';
 import { eq, desc } from 'drizzle-orm';
 import Link from 'next/link';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
@@ -13,6 +13,7 @@ async function getAllPosts() {
       slug: posts.slug,
       excerpt: posts.excerpt,
       publishedAt: posts.publishedAt,
+      createdAt: posts.createdAt,
       author: {
         username: profiles.username,
         fullName: profiles.fullName,
@@ -21,7 +22,7 @@ async function getAllPosts() {
     .from(posts)
     .leftJoin(profiles, eq(posts.authorId, profiles.id))
     .where(eq(posts.published, true))
-    .orderBy(desc(posts.publishedAt));
+    .orderBy(desc(posts.publishedAt), desc(posts.createdAt));
 
   // Get tags for each post
   const postsWithTags = await Promise.all(
@@ -120,8 +121,8 @@ export default async function BlogPage() {
                         {post.author?.fullName || post.author?.username || 'Anonymous'}
                       </span>
                       <span>•</span>
-                      <time dateTime={post.publishedAt?.toISOString()}>
-                        {post.publishedAt?.toLocaleDateString('en-US', {
+                      <time dateTime={(post.publishedAt || post.createdAt)?.toISOString()}>
+                        {(post.publishedAt || post.createdAt)?.toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric'

@@ -1,5 +1,5 @@
 import { db } from '@/lib/db';
-import { tags, postTags, posts } from '@/lib/db/schema';
+import { tags, postTags, posts } from '@/lib/db/schema-postgres';
 import { eq, desc, count, and, inArray } from 'drizzle-orm';
 import Link from 'next/link';
 

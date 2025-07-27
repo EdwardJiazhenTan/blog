@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { generateId, slugify } from '@/lib/utils';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useMarkdownPreview } from '@/hooks/useMarkdownPreview';
 import { ProtectedAdmin } from '@/components/admin/ProtectedAdmin';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 
 function WritePageContent() {
   const { logout } = useAdminAuth();
@@ -17,9 +18,41 @@ function WritePageContent() {
   const [featuredImage] = useState(''); // Removed featured image functionality
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   
   // Use markdown preview hook after content state is declared
   const { html: previewHtml, loading: previewLoading, error: previewError } = useMarkdownPreview(content);
+
+  const handleImageInsert = (mediaUrl: string, altText: string, isVideo?: boolean) => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    let mediaHtml: string;
+    
+    if (isVideo) {
+      mediaHtml = `<video controls style="max-width: 100%; height: auto;" class="img-medium">
+  <source src="${mediaUrl}" type="video/mp4">
+  Your browser does not support the video tag.
+</video>`;
+    } else {
+      mediaHtml = `<img src="${mediaUrl}" alt="${altText}" class="img-medium" />`;
+    }
+    
+    const currentPosition = textarea.selectionStart;
+    const newContent = 
+      content.substring(0, currentPosition) + 
+      mediaHtml + 
+      content.substring(currentPosition);
+    
+    setContent(newContent);
+    
+    // Focus back to textarea and set cursor after inserted media
+    setTimeout(() => {
+      textarea.focus();
+      const newPosition = currentPosition + mediaHtml.length;
+      textarea.setSelectionRange(newPosition, newPosition);
+    }, 0);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,6 +186,11 @@ function WritePageContent() {
 
           {/* Featured Image - Removed, use markdown instead */}
 
+          {/* Image Upload */}
+          {viewMode === 'edit' && (
+            <ImageUpload onImageInsert={handleImageInsert} />
+          )}
+
           {/* Content Editor */}
           <div className="border-t border-opacity-10 pt-8" style={{borderColor: 'var(--foreground)'}}>
             {viewMode === 'preview' ? (
@@ -181,6 +219,7 @@ function WritePageContent() {
               </div>
             ) : (
               <textarea
+                ref={textareaRef}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 className="w-full text-lg bg-transparent border-none outline-none placeholder-opacity-40 resize-none font-handwriting leading-relaxed"

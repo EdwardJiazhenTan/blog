@@ -317,6 +317,62 @@
   .markdown-content img {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 2px solid var(--foreground);
+    transform: rotate(-1deg);
+    transition: transform 0.3s ease;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .markdown-content img:hover {
+    transform: rotate(0deg) scale(1.02);
+  }
+
+  /* Image size utilities */
+  .markdown-content .img-small {
+    max-width: 200px;
+  }
+
+  .markdown-content .img-medium {
+    max-width: 400px;
+  }
+
+  .markdown-content .img-large {
+    max-width: 600px;
+  }
+
+  .markdown-content .img-full {
+    max-width: 100%;
+  }
+
+  .markdown-content .img-center {
+    display: block;
+    margin: 0 auto;
+  }
+
+  .markdown-content .img-left {
+    float: left;
+    margin: 0 1rem 1rem 0;
+  }
+
+  .markdown-content .img-right {
+    float: right;
+    margin: 0 0 1rem 1rem;
+  }
+
+  /* Video styling to match image styling */
+  .markdown-content video {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 2px solid var(--foreground);
+    transform: rotate(-1deg);
+    transition: transform 0.3s ease;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .markdown-content video:hover {
+    transform: rotate(0deg) scale(1.02);
   }
 
   .markdown-content pre {

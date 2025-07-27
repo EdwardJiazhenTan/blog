@@ -1,5 +1,5 @@
 import { db } from '@/lib/db';
-import { posts, profiles, tags, postTags } from '@/lib/db/schema';
+import { posts, profiles, tags, postTags } from '@/lib/db/schema-postgres';
 import { eq, desc, inArray, and } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';

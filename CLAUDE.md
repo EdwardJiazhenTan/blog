@@ -15,7 +15,7 @@ npm run lint               # Run ESLint
 ### Database Operations
 ```bash
 npm run db:generate        # Generate Drizzle migrations
-npm run db:migrate         # Apply migrations to SQLite database
+npm run db:migrate         # Apply migrations to PostgreSQL database
 npm run db:studio          # Open Drizzle Studio (database GUI)
 npm run db:seed            # Seed database with sample blog posts
 ```
@@ -23,11 +23,11 @@ npm run db:seed            # Seed database with sample blog posts
 ## Architecture Overview
 
 ### Database Strategy
-This blog uses a **dual database approach** for flexible deployment:
+This blog uses **PostgreSQL** for persistent data storage:
 
-- **Development**: SQLite with Drizzle ORM (`./dev.db`)
-- **Production**: PostgreSQL via Supabase (planned)
-- **Migrations**: Shared Drizzle schema works for both databases
+- **Development & Production**: PostgreSQL via Neon with Drizzle ORM
+- **Configuration**: Uses `.env.development.local` with Vercel-pulled environment variables
+- **Migrations**: PostgreSQL-specific schema in `schema-postgres.ts`
 
 The database schema includes: `profiles`, `posts`, `categories`, `postCategories`, `tags`, `postTags`, and `comments` tables.
 

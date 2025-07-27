@@ -1,11 +1,12 @@
 import { clsx, type ClassValue } from "clsx";
+import { v4 as uuidv4 } from 'uuid';
 
 export function cn(...inputs: ClassValue[]) {
   return clsx(inputs);
 }
 
 export function generateId(): string {
-  return Math.random().toString(36).substr(2, 9);
+  return uuidv4();
 }
 
 export function slugify(text: string): string {
