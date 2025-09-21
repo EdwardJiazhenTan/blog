@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 import { posts, profiles, tags, postTags } from '@/lib/db/schema-postgres';
 import { eq, desc } from 'drizzle-orm';
@@ -105,7 +106,7 @@ export async function POST(request: NextRequest) {
       published: published || false,
       featured: featured || false,
       featuredImage,
-      publishedAt: publishedAt ? new Date(publishedAt) : null,
+      publishedAt: published ? (publishedAt ? new Date(publishedAt) : new Date()) : null,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -141,6 +142,11 @@ export async function POST(request: NextRequest) {
         });
       }
     }
+
+    // Revalidate pages that display posts
+    revalidatePath('/');
+    revalidatePath('/blog');
+    revalidatePath('/topics');
 
     console.log('Post created successfully with ID:', id);
     return NextResponse.json({ success: true, id });

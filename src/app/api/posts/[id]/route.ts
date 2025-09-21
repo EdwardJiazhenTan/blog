@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 import { posts, tags, postTags } from '@/lib/db/schema-postgres';
 import { eq } from 'drizzle-orm';
@@ -85,7 +86,7 @@ export async function PUT(
     if (postTagNames) {
       // Remove existing tags
       await db.delete(postTags).where(eq(postTags.postId, id));
-      
+
       // Add new tags
       if (postTagNames.length > 0) {
         for (const tagName of postTagNames) {
@@ -120,6 +121,11 @@ export async function PUT(
       }
     }
 
+    // Revalidate pages that display posts
+    revalidatePath('/');
+    revalidatePath('/blog');
+    revalidatePath('/topics');
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error updating post:', error);
@@ -153,6 +159,11 @@ export async function DELETE(
     const result = await db
       .delete(posts)
       .where(eq(posts.id, id));
+
+    // Revalidate pages that display posts
+    revalidatePath('/');
+    revalidatePath('/blog');
+    revalidatePath('/topics');
 
     return NextResponse.json({ success: true });
   } catch (error) {
